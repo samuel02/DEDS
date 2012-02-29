@@ -19,6 +19,7 @@ public class CarWashView extends SimView{
 	
 	public void update(Observable arg0, Object arg1) {
 		
-		
+		something();
+		/*dfsgdsfgsdfgs*/
 	}
 }
