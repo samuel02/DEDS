@@ -2,6 +2,7 @@ package deds.carwash;
 
 import deds.view.SimView;
 import java.util.Observable;
+import java.util.Formatter;
 
 /**
  * CarWashView
