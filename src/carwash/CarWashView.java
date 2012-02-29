@@ -1,6 +1,7 @@
-package deds.carwash;
+package carwash;
 
-import deds.view.SimView;
+import deds.SimView;
+
 import java.util.Observable;
 import java.util.Formatter;
 

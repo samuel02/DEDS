@@ -1,4 +1,4 @@
-package deds.view;
+package deds;
 
 import java.util.Observer;
 import java.util.Observable;
