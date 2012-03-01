@@ -1,6 +1,6 @@
 package carwash.events;
 
-public class Start
+public class StartEvent
 {
 
 }
