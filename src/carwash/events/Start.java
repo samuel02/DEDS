@@ -1,4 +1,4 @@
-package carwash.event;
+package carwash.events;
 
 public class Start
 {
