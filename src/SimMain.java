@@ -1,19 +1,21 @@
+import deds.*;
+import carwash.*;
+
 
 public class SimMain {
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main( String[] args ) {
 
-		carwash.State state = new carwash.State();
-		state.addView( new carwash.View() );
+		CarWashState state = new CarWashState();
+		state.addObserver( new CarWashView() );
 		
-		deds.Simulator simulator = new deds.Simulator();
+		Simulator simulator = new Simulator();
 		simulator.setState( state );
-		simulator.addEvent( new carwash.event.Start( 0.0f ) );
-		simulator.addEvent( new deds.event.Stop( 15.0f ) );
+		simulator.addEvent( new StartEvent( 0.0f ) );
+		simulator.addEvent( new StopEvent( 15.0f ) );
 		simulator.run();
 	}
-
 }
