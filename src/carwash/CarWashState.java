@@ -11,7 +11,7 @@ import deds.*;
  * @author sebvik-0
  * 
  */
-abstract public class CarWashState extends State
+public class CarWashState extends State
 {
 	private final int   DEFAULT_NUM_FAST_MACHINES = 2;
 	private final float DEFAULT_FAST_DISTR_MIN    = 2.8f;
@@ -341,6 +341,8 @@ abstract public class CarWashState extends State
 		
 		machineIdleTime += ( nFastAvalible + nSlowAvalible ) * dt;
 		queueTime       += getQueueSize() * dt;
+		
+		lastEvent = event;
 		
 		setChanged();
 		notifyObservers();
