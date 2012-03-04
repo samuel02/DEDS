@@ -49,7 +49,7 @@ public class CarWashState extends State
 	
 	private int   nRejectedCars;
 	
-	private int   nextCarId;
+	private int   nCars;
 	
 	private Event lastEvent;
 
@@ -78,7 +78,7 @@ public class CarWashState extends State
 		
 		nRejectedCars = 0;
 		
-		nextCarId = 0;
+		nCars = 0;
 		
 		lastEvent = null;
 	}
@@ -210,6 +210,14 @@ public class CarWashState extends State
 	{
 		return queueTime;
 	}
+	
+	/**
+	 * @return Mean queuing time.
+	 */
+	public float getMeanQueueTime()
+	{
+		return queueTime / nCars;
+	}
 
 	/**
 	 * @return Total number of cars rejected.
@@ -226,7 +234,7 @@ public class CarWashState extends State
 	 */
 	public Car createNewCar()
 	{
-		return new Car( nextCarId++ );
+		return new Car( nCars++ );
 	}
 
 	/**
