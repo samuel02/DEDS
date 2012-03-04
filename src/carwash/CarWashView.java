@@ -2,6 +2,7 @@ package carwash;
 
 import java.util.Observable;
 import java.util.Formatter;
+import carwash.events.*;
 
 /**
  * CarWashView
@@ -25,29 +26,29 @@ public class CarWashView extends deds.SimView{
 				 "IdleTime",
 				 "QueueTime",
 				 "QueueSize",
-				 "Rejected");		
-		
-		printHeader();
-		printTableHeader();
+				 "Rejected");
 	}
 	
 	public void update(Observable arg0, Object arg1) {
-		if (!simNotFinished()) {
-			printTableRow(arg0);
+		CarWashState state = (CarWashState) arg0;
+		if(state.getLastEvent().name == "Start") {
+			printHeader(state);
+			printTableHeader();
+		} else if (state.getLastEvent().name == "Stop") {
+			printEnd(state);
 		} else {
-			printEnd();
+			printTableRow(state);
 		}
-	
 	}
 	
-	private void printHeader() {
-		System.out.println("Fast machines: " + fastMachines);
-		System.out.println("Slow machines: " + slowMachines);
-		System.out.println("Fast distribution: " + fastDistribution);
-		System.out.println("Slow distribution: " + slowDistribution);
-		System.out.println("Exponential distribution with lambda = " + expWithLambda);
-		System.out.println("Seed = " + seed);
-		System.out.println("Max Queue Size: " + maxQueueSize);
+	private void printHeader(CarWashState state) {
+		System.out.println("Fast machines: " + state.getNumFastMachines());
+		System.out.println("Slow machines: " + state.getNumSlowMachines());
+		System.out.println("Fast distribution: " + state.getFastDistribution());
+		System.out.println("Slow distribution: " + state.getSlowDistribution());
+		System.out.println("Exponential distribution with lambda = " + state.getExponentialDistribution());
+		System.out.println("Seed = " + state.getSeed());
+		System.out.println("Max Queue Size: " + state.getMaxQueueSize());
 		printSeparator();
 	}
 	
@@ -56,24 +57,25 @@ public class CarWashView extends deds.SimView{
 		System.out.println(tableHeader);
 	}
 	
-	private void printEnd() {
+	private void printEnd(CarWashState state) {
 		printSeparator();
-		System.out.println("Total idle machine time:" + totalIdleTime);
-		System.out.println("Total queueing time: " + totalQueueTime);
-		System.out.println("Mean queuing time: " + meanQueueTime);
-		System.out.prinln("Rejected cars: " + rejectedCars)
+		System.out.println("Total idle machine time:" + state.getMachineIdleTime());
+		System.out.println("Total queueing time: " + state.getQueueTime());
+		System.out.println("Mean queuing time: " + state.getMeanQueueTime());
+		System.out.println("Rejected cars: " + state.getNumRejectedCars());
 	}
 	
-	private void printTableRow(Object arg0) {
-		String time = arg1.time;
-		String fast = arg1.fast;
-		String slow = arg1.slow;
-		String id = arg1.id;
-		String event = arg1.event;
-		String idleTime = arg1.idletime;
-		String queueTime = arg1.queueTime;
-		String queueSize = arg1.queueSize;
-		String rejected = arg1.rejected;
+	private void printTableRow(CarWashState state) {
+		Event event = state.getLastEvent();
+		
+		long time = event.getTime();
+		int fast = state.getNumFastMachinesAvailable();
+		int slow = state.getNumSlowMachinesAvailable();
+		int id = event.getId();
+		float idleTime = state.getMachineIdleTime();
+		float queueTime = state.getQueueTime();
+		int queueSize = state.getQueueSize();
+		int rejected = state.getNumRejectedCars();
 		
 		
 	}
