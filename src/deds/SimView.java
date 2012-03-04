@@ -11,13 +11,11 @@ import java.util.Observable;
  */
 public abstract class SimView implements Observer{
 	
+	
+	
 	public SimView() {
 		
 	}
 	
-	
-	public void update(Observable arg0, Object arg1) {
-		
-	}
 
 }
