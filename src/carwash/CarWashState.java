@@ -47,9 +47,9 @@ public class CarWashState extends State
 	private float machineIdleTime;
 	private float queueTime;
 	
-	private int   nRejectedCars;
-	
 	private int   nCars;
+	private int   nRejectedCars;
+	private int   nextCarId;
 	
 	private Event lastEvent;
 
@@ -76,9 +76,9 @@ public class CarWashState extends State
 		machineIdleTime = 0;
 		queueTime       = 0;
 		
+		nCars         = 0;
 		nRejectedCars = 0;
-		
-		nCars = 0;
+		nextCarId     = 0;
 		
 		lastEvent = null;
 	}
@@ -234,7 +234,8 @@ public class CarWashState extends State
 	 */
 	public Car createNewCar()
 	{
-		return new Car( nCars++ );
+		nCars++;
+		return new Car( nextCarId++ );
 	}
 
 	/**
@@ -243,6 +244,7 @@ public class CarWashState extends State
 	public void rejectCar()
 	{
 		nRejectedCars++;
+		nCars--;
 	}
 	
 	/**
