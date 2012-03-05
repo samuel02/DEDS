@@ -4,7 +4,10 @@ import java.util.Observer;
 import java.util.Observable;
 
 /**
- * Abstract class for view.
+ * Abstract class for view implements Observer.
+ * 
+ * The class has reference to the current event
+ * by getting it from the state.
  * 
  * @author samuelnilsson
  *
