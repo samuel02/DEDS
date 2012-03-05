@@ -11,7 +11,7 @@ import java.util.Observable;
  */
 public abstract class SimView implements Observer{
 	
-	Event event;
+	protected Event event;
 	
 	public SimView() {
 	

@@ -16,25 +16,16 @@ public class CarWashView extends deds.SimView{
 	
 	public CarWashView() {
 		super();
-		
-		tableRow = new Formatter();
-		tableRow.format("", "Time", 
-				 "Fast",
-				 "Slow",
-				 "Id",
-				 "Event",
-				 "IdleTime",
-				 "QueueTime",
-				 "QueueSize",
-				 "Rejected");
 	}
 	
 	public void update(Observable arg0, Object arg1) {
+		super.update(arg0, arg1);
+		
 		CarWashState state = (CarWashState) arg0;
-		if(state.getLastEvent().toString() == "Start") {
+		if(event.toString() == "Start") {
 			printHeader(state);
 			printTableHeader();
-		} else if (state.getLastEvent().toString() == "Stop") {
+		} else if (event.toString() == "Stop") {
 			printEnd(state);
 		} else {
 			printTableRow(state);
@@ -42,19 +33,26 @@ public class CarWashView extends deds.SimView{
 	}
 	
 	private void printHeader(CarWashState state) {
-		System.out.println("Fast machines: " + state.getNumFastMachines());
-		System.out.println("Slow machines: " + state.getNumSlowMachines());
-		System.out.println("Fast distribution: " + state.getFastDistribution());
-		System.out.println("Slow distribution: " + state.getSlowDistribution());
-		System.out.println("Exponential distribution with lambda = " + state.getExponentialDistribution());
-		System.out.println("Seed = " + state.getSeed());
-		System.out.println("Max Queue Size: " + state.getMaxQueueSize());
+		System.out.println("Fast machines: "
+							+ state.getNumFastMachines());
+		System.out.println("Slow machines: " 
+							+ state.getNumSlowMachines());
+		System.out.println("Fast distribution: " 
+							+ state.getFastDistribution());
+		System.out.println("Slow distribution: " 
+							+ state.getSlowDistribution());
+		System.out.println("Exponential distribution with lambda = " 
+							+ state.getExponentialDistribution());
+		System.out.println("Seed = " 
+							+ state.getSeed());
+		System.out.println("Max Queue Size: " 
+							+ state.getMaxQueueSize());
 		printSeparator();
 	}
 	
 	private void printTableHeader() {
 		
-		System.out.println(tableHeader);
+		System.out.println("");
 	}
 	
 	private void printEnd(CarWashState state) {
@@ -66,12 +64,10 @@ public class CarWashView extends deds.SimView{
 	}
 	
 	private void printTableRow(CarWashState state) {
-		Event event = state.getLastEvent();
-		
-		long time = event.getTime();
+		long time = ((CarWashEvent) event).getCar().getTime();
 		int fast = state.getNumFastMachinesAvailable();
 		int slow = state.getNumSlowMachinesAvailable();
-		int id = event.getId();
+		int id = ((CarWashEvent) event).getCar().getId();
 		float idleTime = state.getMachineIdleTime();
 		float queueTime = state.getQueueTime();
 		int queueSize = state.getQueueSize();
