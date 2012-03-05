@@ -3,6 +3,8 @@ package deds;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import deds.events.Event;
+
 public class EventQueue {
     
     ArrayList<Event> sortedList;

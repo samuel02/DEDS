@@ -1,7 +1,7 @@
 package deds.events;
 
 
-import deds.Event;
+import deds.Simulator;
 import deds.State;
 
 public class StopEvent extends Event
@@ -11,7 +11,7 @@ public class StopEvent extends Event
 		super("Stop", time);
 	}
 	
-	public void execute(State s) {
+	public void execute(Simulator sim,State s) {
 		s.stopRunning();
 	}
 }

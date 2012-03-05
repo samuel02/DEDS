@@ -6,6 +6,7 @@ import java.util.Vector;
 import random.*;
 
 import deds.*;
+import deds.events.Event;
 
 
 /**
