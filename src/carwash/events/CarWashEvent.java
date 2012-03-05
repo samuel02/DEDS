@@ -1,5 +1,6 @@
-package carwash;
+package carwash.events;
 
+import carwash.CarWashState;
 import carwash.CarWashState.Car;
 import deds.Event;
 import deds.State;

@@ -6,6 +6,8 @@ public class Simulator {
 	
 	public void run() {
 		do {
+			Event next;
+			state.
 			
 		}while (state.isRunning());
 	}
