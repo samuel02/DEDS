@@ -2,6 +2,7 @@ package carwash;
 
 import java.util.Observable;
 import deds.SimView;
+import carwash.events.CarWashEvent;
 
 /**
  * CarWashView extends SimView and is a view for the
