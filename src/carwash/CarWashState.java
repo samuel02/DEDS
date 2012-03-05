@@ -4,6 +4,7 @@ package carwash;
 import java.util.Vector;
 
 import deds.*;
+import deds.events.Event;
 
 
 /**

@@ -1,7 +1,6 @@
 package deds.events;
 
 
-import deds.Event;
 import deds.Simulator;
 import deds.State;
 

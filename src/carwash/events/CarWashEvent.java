@@ -2,20 +2,20 @@ package carwash.events;
 
 import carwash.CarWashState;
 import carwash.CarWashState.Car;
-import deds.Event;
 import deds.Simulator;
 import deds.State;
+import deds.events.Event;
 
 public abstract class CarWashEvent extends Event{
 
 	
 	protected Car car;
-	protected CarWashEvent(Car car, String name, long time) {
+	protected CarWashEvent(Car car, String name, float time) {
 		super(name, time);
 		this.car = car;
 	}
 	
-	protected CarWashEvent(String name, long time) {
+	protected CarWashEvent(String name, float time) {
 		this(null,name,time);
 	}
 

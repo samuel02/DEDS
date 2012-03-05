@@ -12,10 +12,10 @@ public class ArriveEvent extends CarWashEvent{
 
 	@Override
 	protected void execute(Simulator sim,CarWashState s) {
-		s.beginEvent(this);
 		if(!s.isQueueFull()) {
-			if(s.isQueueEmpty()) {
-				s.serveCar(car);
+			if(s.isQueueEmpty() && s.hasVacantMachines() ) {
+				float timeCarFinished = s.serveCar(car);
+				sim.addEvent(new LeaveEvent(timeCarFinished,car));
 			}
 			else {
 				s.placeCarInQueue(car);
@@ -24,10 +24,8 @@ public class ArriveEvent extends CarWashEvent{
 		else {
 			s.rejectCar();
 		}
-		s.endEvent();
-		//TODO: add as lastEvent
-		//TODO: create new car
-		//TODO: create new ARRIVE and LEAVE EVENT
+		Car newCar = s.createNewCar();
+		sim.addEvent(new ArriveEvent(s.getNewArrivalTime(),newCar));
 	}
 
 }

@@ -1,9 +1,16 @@
 package deds;
 
+import deds.events.Event;
+
 public class Simulator {
 
 	State state;
 	EventQueue eventQueue;
+	
+	public Simulator(State s) {
+		state = s;
+		eventQueue = new EventQueue();
+	}
 	
 	public void addEvent(Event e) {
 		eventQueue.addEvent(e);

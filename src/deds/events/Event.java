@@ -1,4 +1,7 @@
-package deds;
+package deds.events;
+
+import deds.Simulator;
+import deds.State;
 
 public abstract class Event implements Comparable<Event>
 { 
