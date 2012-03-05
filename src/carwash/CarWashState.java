@@ -3,6 +3,8 @@ package carwash;
 
 import java.util.Vector;
 
+import random.*;
+
 import deds.*;
 
 
@@ -13,6 +15,8 @@ import deds.*;
  */
 public class CarWashState extends State
 {
+	private final int   DEFAULT_SEED              = 1234;
+	
 	private final int   DEFAULT_NUM_FAST_MACHINES = 2;
 	private final float DEFAULT_FAST_DISTR_MIN    = 2.8f;
 	private final float DEFAULT_FAST_DISTR_MAX    = 4.6f;
@@ -22,24 +26,25 @@ public class CarWashState extends State
 	private final float DEFAULT_SLOW_DISTR_MAX    = 6.7f;
 	
 	private final float DEFAULT_EXP_DISTRI_LAMBDA = 2.0f;
-	
-	private final int   DEFAULT_SEED              = 1234;
-	
+
 	private final int   DEFAULT_MAX_QUEUE_SIZE    = 5;
 
+	private int   seed;
+	
 	private int   nFastMachines;
 	private int   nFastAvalible;
 	private float fastDistrMin;
 	private float fastDistrMax;
+	private UniformRandomStream fastRandStream;
 
 	private int   nSlowMachines;
 	private int   nSlowAvalible;
 	private float slowDistrMin;
 	private float slowDistrMax;
+	private UniformRandomStream slowRandStream;
 	
 	private float expDistrLambda;
-	
-	private int   seed;
+	private ExponentialRandomStream expRandStream;
 	
 	private int   maxQueueSize;
 	private FIFO<Car> carQueue;
@@ -54,19 +59,22 @@ public class CarWashState extends State
 
 	public CarWashState()
 	{
-		nFastMachines = DEFAULT_NUM_FAST_MACHINES;
-		nFastAvalible = nFastMachines;
-		fastDistrMin  = DEFAULT_FAST_DISTR_MIN;
-		fastDistrMax  = DEFAULT_FAST_DISTR_MAX;
-
+		seed = DEFAULT_SEED;
+		
+		nFastMachines  = DEFAULT_NUM_FAST_MACHINES;
+		nFastAvalible  = nFastMachines;
+		fastDistrMin   = DEFAULT_FAST_DISTR_MIN;
+		fastDistrMax   = DEFAULT_FAST_DISTR_MAX;
+		fastRandStream = new UniformRandomStream( fastDistrMin, fastDistrMax, seed );
+		
 		nSlowMachines = DEFAULT_NUM_SLOW_MACHINES;
 		nSlowAvalible = nSlowMachines;
 		slowDistrMin  = DEFAULT_SLOW_DISTR_MIN;
 		slowDistrMax  = DEFAULT_SLOW_DISTR_MAX;
+		slowRandStream = new UniformRandomStream( slowDistrMin, slowDistrMax, seed );
 		
 		expDistrLambda = DEFAULT_EXP_DISTRI_LAMBDA;
-		
-		seed = DEFAULT_SEED;
+		expRandStream = new ExponentialRandomStream( expDistrLambda, seed );
 		
 		maxQueueSize = DEFAULT_MAX_QUEUE_SIZE;
 		carQueue     = new FIFO<Car>();
@@ -158,6 +166,16 @@ public class CarWashState extends State
 	{
 		return seed;
 	}
+	
+	/**
+	 * Generates the time of the next arrival.
+	 * 
+	 * @return Time of the next arrival.
+	 */
+	public float getNewArriveTime()
+	{
+		return getLastEvent().getTime() + (float) expRandStream.next();
+	}
 
 	/**
 	 * @return Maximum car queue size.
@@ -246,20 +264,26 @@ public class CarWashState extends State
 	/**
 	 * @param car
 	 *            The car to serve.
+	 *            
+	 * @return The time when the wash is done.
 	 */
-	public void serveCar( Car car )
+	public float serveCar( Car car )
 	{
+		float time = getLastEvent().getTime();
+		
 		if ( car.getWMType() == WashingMachineType.NONE )
 		{
 			if ( nFastAvalible > 0 )
 			{
 				car.setWMType( WashingMachineType.FAST );
 				nFastAvalible--;
+				time += (float) fastRandStream.next();
 			}
 			else if ( nSlowAvalible > 0 )
 			{
 				car.setWMType( WashingMachineType.SLOW );
 				nSlowAvalible--;
+				time += (float) slowRandStream.next();
 			}
 			else
 			{
@@ -270,6 +294,8 @@ public class CarWashState extends State
 		{
 			// TODO: Throw an exception!!
 		}
+		
+		return time;
 	}
 
 	/**
