@@ -50,8 +50,6 @@ public class CarWashState extends State
 	private int   nCars;
 	private int   nRejectedCars;
 	private int   nextCarId;
-	
-	private Event lastEvent;
 
 
 	public CarWashState()
@@ -79,8 +77,6 @@ public class CarWashState extends State
 		nCars         = 0;
 		nRejectedCars = 0;
 		nextCarId     = 0;
-		
-		lastEvent = null;
 	}
 
 	/**
@@ -330,14 +326,6 @@ public class CarWashState extends State
 		
 		car.setWMType( WashingMachineType.NONE );
 	}
-
-	/**
-	 * @return The last event to call the update() method.
-	 */
-	public Event getLastEvent()
-	{
-		return lastEvent;
-	}
 	
 	/**
 	 * Call at the start of an event's execute() method.
@@ -345,8 +333,11 @@ public class CarWashState extends State
 	 * @param event
 	 *            The event that calls the method.
 	 */
+	@Override
 	public void beginEvent( Event event )
 	{
+		Event lastEvent = getLastEvent();
+		
 		float dt;
 		
 		if ( lastEvent == null )
@@ -361,18 +352,8 @@ public class CarWashState extends State
 		machineIdleTime += ( nFastAvalible + nSlowAvalible ) * dt;
 		queueTime       += getQueueSize() * dt;
 		
-		lastEvent = event;
+		super.beginEvent( event );
 	}
-	
-	/**
-	 * Call at the end of an event's execute() method.
-	 */
-	public void endEvent()
-	{
-		setChanged();
-		notifyObservers();
-	}
-
 	
 	private enum WashingMachineType
 	{
@@ -443,7 +424,7 @@ class FIFO<T>
 	}
 	
 	/**
-	 * Removes the item at the front of the queue.
+	 * Removes the item at the front of the queue and returns it.
 	 * 
 	 * @return The item that was removed.
 	 */

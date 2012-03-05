@@ -12,11 +12,13 @@ import java.util.Observable;
 abstract public class State extends Observable
 {
 	private boolean running;
+	private Event   lastEvent;
 
 
 	public State()
 	{
-		running = true;
+		running   = true;
+		lastEvent = null;
 	}
 
 	/**
@@ -33,5 +35,33 @@ abstract public class State extends Observable
 	public void stopRunning()
 	{
 		running = false;
+	}
+	
+	/**
+	 * Call at the start of an event's execute() method.
+	 * 
+	 * @param event
+	 *            The event that calls the method.
+	 */
+	public void beginEvent( Event event )
+	{
+		lastEvent = event;
+	}
+	
+	/**
+	 * Call at the end of an event's execute() method.
+	 */
+	public void endEvent()
+	{
+		setChanged();
+		notifyObservers();
+	}
+	
+	/**
+	 * @return The last event to call the update() method.
+	 */
+	public Event getLastEvent()
+	{
+		return lastEvent;
 	}
 }
