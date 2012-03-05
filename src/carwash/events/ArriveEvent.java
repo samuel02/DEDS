@@ -2,6 +2,7 @@ package carwash.events;
 
 import carwash.CarWashState;
 import carwash.CarWashState.Car;
+import deds.Simulator;
 
 public class ArriveEvent extends CarWashEvent{
 	
@@ -10,7 +11,7 @@ public class ArriveEvent extends CarWashEvent{
 	}
 
 	@Override
-	protected void execute(CarWashState s) {
+	protected void execute(Simulator sim,CarWashState s) {
 		s.beginEvent(this);
 		if(!s.isQueueFull()) {
 			if(s.isQueueEmpty()) {

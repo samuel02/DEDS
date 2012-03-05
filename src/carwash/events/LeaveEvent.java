@@ -2,6 +2,7 @@ package carwash.events;
 
 import carwash.CarWashState;
 import carwash.CarWashState.Car;
+import deds.Simulator;
 
 public class LeaveEvent extends CarWashEvent {
 	
@@ -9,7 +10,7 @@ public class LeaveEvent extends CarWashEvent {
 		super(car,"Leave", time);
 	}
 	@Override
-	protected void execute(CarWashState s) {
+	protected void execute(Simulator sim,CarWashState s) {
 		s.beginEvent(this);
 		s.removeCarFromWash(car);
 		s.endEvent();

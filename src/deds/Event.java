@@ -19,7 +19,7 @@ public abstract class Event implements Comparable<Event>
 		return time;
 	}
 	
-	public abstract void execute(State s);
+	public abstract void execute(Simulator sim,State s);
 	
 	public final String toString() {
 		return name;
