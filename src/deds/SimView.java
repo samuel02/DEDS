@@ -22,7 +22,7 @@ public abstract class SimView implements Observer{
 	
 	public void update(Observable arg0, Object arg1) {
 		State state = (State) arg0;
-		event = state.lastEvent();
+		event = state.getLastEvent();
 	}
 	
 
