@@ -2,10 +2,10 @@ package deds;
 
 public abstract class Event implements Comparable<Event>
 { 
-	final Long time;
+	final Float time;
 	String name;
 	
-	protected Event(String name,long time) {
+	protected Event(String name,float time) {
 		this.name = name;
 		this.time = time;
 	}
@@ -15,7 +15,7 @@ public abstract class Event implements Comparable<Event>
 		return time.compareTo(e.time);
 	}
 	
-	public final long getTime() {
+	public final float getTime() {
 		return time;
 	}
 	
