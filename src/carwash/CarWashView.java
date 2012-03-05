@@ -1,8 +1,6 @@
 package carwash;
 
 import java.util.Observable;
-import java.util.Formatter;
-import deds.Event;
 
 /**
  * CarWashView
@@ -12,10 +10,11 @@ import deds.Event;
  */
 public class CarWashView extends deds.SimView{
 	
-	Formatter tableRow;
+	final String formatter;
 	
 	public CarWashView() {
 		super();
+		formatter = "%-5s\t%-4s\t%-4s\t%-2s\t%-7s\t%-8s\t%-9s\t%-9s\t%-8s";
 	}
 	
 	public void update(Observable arg0, Object arg1) {
@@ -25,7 +24,9 @@ public class CarWashView extends deds.SimView{
 		if(event.toString() == "Start") {
 			printHeader(state);
 			printTableHeader();
+			printTableRow(state);
 		} else if (event.toString() == "Stop") {
+			printTableRow(state);
 			printEnd(state);
 		} else {
 			printTableRow(state);
@@ -51,8 +52,16 @@ public class CarWashView extends deds.SimView{
 	}
 	
 	private void printTableHeader() {
-		
-		System.out.println("");
+		System.out.println(String.format(formatter, 
+				"Time",
+				"Fast",
+				"Slow",
+				"Id",
+				"Event",
+				"IdleTime",
+				"QueueTime",
+				"QueueSize",
+				"Rejected"));
 	}
 	
 	private void printEnd(CarWashState state) {
@@ -64,7 +73,7 @@ public class CarWashView extends deds.SimView{
 	}
 	
 	private void printTableRow(CarWashState state) {
-		long time = ((CarWashEvent) event).getCar().getTime();
+		float time = ((CarWashEvent) event).getTime();
 		int fast = state.getNumFastMachinesAvailable();
 		int slow = state.getNumSlowMachinesAvailable();
 		int id = ((CarWashEvent) event).getCar().getId();
@@ -73,6 +82,16 @@ public class CarWashView extends deds.SimView{
 		int queueSize = state.getQueueSize();
 		int rejected = state.getNumRejectedCars();
 		
+		System.out.println(String.format(formatter, 
+				String.format("%.2f", time),
+				fast,
+				slow,
+				id,
+				event,
+				idleTime,
+				queueTime,
+				queueSize,
+				rejected));
 		
 	}
 	
