@@ -4,14 +4,13 @@ import carwash.CarWashState.Car;
 
 public class ArriveEvent extends CarWashEvent{
 	
-	Car car;
 	protected ArriveEvent(long time, Car car) {
-		super("Arrive", time);
-		this.car = car;
+		super(car,"Arrive", time);
 	}
 
 	@Override
 	protected void execute(CarWashState s) {
+		s.beginEvent(this);
 		if(!s.isQueueFull()) {
 			if(s.isQueueEmpty()) {
 				s.serveCar(car);
@@ -23,6 +22,7 @@ public class ArriveEvent extends CarWashEvent{
 		else {
 			s.rejectCar();
 		}
+		s.endEvent();
 		//TODO: add as lastEvent
 		//TODO: create new car
 		//TODO: create new ARRIVE and LEAVE EVENT
