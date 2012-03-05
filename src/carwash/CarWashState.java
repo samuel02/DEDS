@@ -340,20 +340,35 @@ public class CarWashState extends State
 	}
 	
 	/**
-	 * Updates queuing and idle times and then notifies observers.
+	 * Call at the start of an event's execute() method.
 	 * 
 	 * @param event
 	 *            The event that calls the method.
 	 */
-	public void update( Event event )
+	public void beginEvent( Event event )
 	{
-		float dt = event.getTime() - lastEvent.getTime();
+		float dt;
+		
+		if ( lastEvent == null )
+		{
+			dt = event.getTime();
+		}
+		else
+		{
+			dt = event.getTime() - lastEvent.getTime();
+		}
 		
 		machineIdleTime += ( nFastAvalible + nSlowAvalible ) * dt;
 		queueTime       += getQueueSize() * dt;
 		
 		lastEvent = event;
-		
+	}
+	
+	/**
+	 * Call at the end of an event's execute() method.
+	 */
+	public void endEvent()
+	{
 		setChanged();
 		notifyObservers();
 	}
