@@ -2,7 +2,7 @@ package carwash;
 
 import java.util.Observable;
 import java.util.Formatter;
-import carwash.events.*;
+import deds.Event;
 
 /**
  * CarWashView
@@ -31,10 +31,10 @@ public class CarWashView extends deds.SimView{
 	
 	public void update(Observable arg0, Object arg1) {
 		CarWashState state = (CarWashState) arg0;
-		if(state.getLastEvent().name == "Start") {
+		if(state.getLastEvent().toString() == "Start") {
 			printHeader(state);
 			printTableHeader();
-		} else if (state.getLastEvent().name == "Stop") {
+		} else if (state.getLastEvent().toString() == "Stop") {
 			printEnd(state);
 		} else {
 			printTableRow(state);
