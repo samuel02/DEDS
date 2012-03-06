@@ -20,6 +20,7 @@ import carwash.CarWashState.Car;
 public class CarWashView extends SimView{
 	
 	private final static String FORMATTER = "%-5s\t%-4s\t%-4s\t%-2s\t%-7s\t%-8s\t%-9s\t%-9s\t%-8s";
+	private final static String NO_ID = "-";
 	
 	public CarWashView() {
 		super();
@@ -53,20 +54,16 @@ public class CarWashView extends SimView{
 	 * @param state
 	 */
 	private void printHeader(CarWashState state) {
-		System.out.println("Fast machines: "
-							+ state.getNumFastMachines());
-		System.out.println("Slow machines: " 
-							+ state.getNumSlowMachines());
-		System.out.println("Fast distribution: " 
-							+ state.getFastDistribution());
-		System.out.println("Slow distribution: " 
-							+ state.getSlowDistribution());
-		System.out.println("Exponential distribution with lambda = " 
-							+ state.getExponentialDistribution());
-		System.out.println("Seed = " 
-							+ state.getSeed());
-		System.out.println("Max Queue Size: " 
-							+ state.getMaxQueueSize());
+		float[] fastDist = state.getFastDistribution();
+		float[] slowDist = state.getSlowDistribution();
+		
+		System.out.println("Fast machines: " + state.getNumFastMachines());
+		System.out.println("Slow machines: " + state.getNumSlowMachines());
+		System.out.println("Fast distribution: (" + fastDist[0] + ", " + fastDist[1] + ")");
+		System.out.println("Slow distribution: (" + slowDist[0] + ", " + slowDist[1] + ")");
+		System.out.println("Exponential distribution with lambda = " + state.getExponentialDistribution());
+		System.out.println("Seed = " + state.getSeed());
+		System.out.println("Max Queue Size: " + state.getMaxQueueSize());
 		printSeparator();
 	}
 	
@@ -94,9 +91,9 @@ public class CarWashView extends SimView{
 	 */
 	private void printEnd(CarWashState state) {
 		printSeparator();
-		System.out.println("Total idle machine time:" + state.getMachineIdleTime());
-		System.out.println("Total queueing time: " + state.getQueueTime());
-		System.out.println("Mean queuing time: " + state.getMeanQueueTime());
+		System.out.println("Total idle machine time:" + String.format("%.2f", state.getMachineIdleTime()));
+		System.out.println("Total queueing time: " + String.format("%.2f", state.getQueueTime()));
+		System.out.println("Mean queuing time: " + String.format("%.2f", state.getMeanQueueTime()));
 		System.out.println("Rejected cars: " + state.getNumRejectedCars());
 	}
 	
@@ -108,43 +105,40 @@ public class CarWashView extends SimView{
 	 */
 	private void printTableRow(CarWashState state) {
 		
+		int fast = state.getNumFastMachinesAvailable();
+		int slow = state.getNumSlowMachinesAvailable();
+		float idleTime = state.getMachineIdleTime();
+		float queueTime = state.getQueueTime();
+		int queueSize = state.getQueueSize();
+		int rejected = state.getNumRejectedCars();
+		
+		float time = event.getTime();
+		String id = NO_ID;
+		
 		try {
 			CarWashEvent carWashEvent = (CarWashEvent) event;
 			Car car = carWashEvent.getCar();
-		
-			float time = carWashEvent.getTime();
-			String id = "-";
-			if( car != null ) {
-				id = Integer.toString(car.getId());
-			}
-		
-			int fast = state.getNumFastMachinesAvailable();
-			int slow = state.getNumSlowMachinesAvailable();
-			float idleTime = state.getMachineIdleTime();
-			float queueTime = state.getQueueTime();
-			int queueSize = state.getQueueSize();
-			int rejected = state.getNumRejectedCars();
-		
-			System.out.println(String.format(FORMATTER, 
-					String.format("%.2f", time),
-					fast,
-					slow,
-					id,
-					event,
-					idleTime,
-					queueTime,
-					queueSize,
-					rejected));
-			
+			id = ( car == null ? NO_ID : "" + car.getId());
 		} catch( ClassCastException e ) {
-			System.out.println(e);
+			id = NO_ID;
 		}
+		
+		System.out.println(String.format(FORMATTER, 
+				String.format("%.2f", time),
+				fast,
+				slow,
+				id,
+				event,
+				String.format("%.2f", idleTime),
+				String.format("%.2f", queueTime),
+				queueSize,
+				rejected));
 	}
 	
 	/**
 	 * Prints a seperator for the layout.
 	 */
 	private void printSeparator() {
-		System.out.println("-------------------------------------");
+		System.out.println("--------------------------------------------------------");
 	}
 }
