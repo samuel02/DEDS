@@ -3,7 +3,7 @@ package carwash;
 
 import java.util.Vector;
 
-import random.*;
+import carwash.randomstreams.*;
 
 import deds.*;
 import deds.events.Event;

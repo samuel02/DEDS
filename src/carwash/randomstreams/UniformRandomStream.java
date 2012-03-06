@@ -1,5 +1,5 @@
 
-package random;
+package carwash.randomstreams;
 
 import java.util.Random;
 
