@@ -40,7 +40,7 @@ class ArriveEvent extends CarWashEvent{
 			//else the car will not be washed
 			else  {
 				//tells state that a car was rejected
-				s.rejectCar();
+				s.rejectCar(car);
 				
 			}
 			

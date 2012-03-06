@@ -3,29 +3,31 @@ package carwash.events;
 import carwash.CarWashState;
 import carwash.CarWashState.Car;
 import deds.Simulator;
+import deds.State;
+import deds.events.StartEvent;
 
 /**
  * 
  * @author Sarar
  *
  */
-public class StartCarWashEvent extends  CarWashEvent
+public class StartCarWashEvent extends  StartEvent
 {
 
 	/**
 	 * Creates an instance of this class
 	 */
 	public StartCarWashEvent() {
-		super( "Start", 0);
 	}
 
 	
 	
 	//overrides javadoc too:)
 	@Override
-	public void execute(Simulator sim, CarWashState s) {
-		Car newCar = s.createNewCar();
-		sim.addEvent(new ArriveEvent(s.getNewArriveTime(),newCar));
+	public void execute(Simulator sim, State s) {
+		CarWashState cws = (CarWashState) s;
+		Car newCar = cws.createNewCar();
+		sim.addEvent(new ArriveEvent(cws.getNewArriveTime(),newCar));
 		
 	}
 
