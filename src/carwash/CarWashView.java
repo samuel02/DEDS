@@ -21,6 +21,7 @@ public class CarWashView extends SimView{
 	
 	private final static String FORMATTER = "%-5s\t%-4s\t%-4s\t%-2s\t%-7s\t%-8s\t%-9s\t%-9s\t%-8s";
 	private final static String NO_ID = "-";
+	private final static int SEPARATOR_LENGTH = 95;
 	
 	public CarWashView() {
 		super();
@@ -136,9 +137,13 @@ public class CarWashView extends SimView{
 	}
 	
 	/**
-	 * Prints a seperator for the layout.
+	 * Prints a separator for the layout.
 	 */
 	private void printSeparator() {
-		System.out.println("--------------------------------------------------------");
+		String separator = "-";
+		for(int i = 0; i<SEPARATOR_LENGTH; i++) {
+			separator += "-";
+		}
+		System.out.println(separator);
 	}
 }
