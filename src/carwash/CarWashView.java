@@ -2,7 +2,10 @@ package carwash;
 
 import java.util.Observable;
 import deds.SimView;
-import carwash.events.CarWashEvent;
+import deds.events.*;
+import carwash.events.*;
+import carwash.CarWashState.Car;
+
 
 /**
  * CarWashView extends SimView and is a view for the
@@ -16,14 +19,10 @@ import carwash.events.CarWashEvent;
  */
 public class CarWashView extends SimView{
 	
-	final String formatter;
+	private final static String FORMATTER = "%-5s\t%-4s\t%-4s\t%-2s\t%-7s\t%-8s\t%-9s\t%-9s\t%-8s";
 	
-	/**
-	 * Constructor creates a formatter that is used for printing results.
-	 */
 	public CarWashView() {
 		super();
-		formatter = "%-5s\t%-4s\t%-4s\t%-2s\t%-7s\t%-8s\t%-9s\t%-9s\t%-8s";
 	}
 	
 	
@@ -35,11 +34,11 @@ public class CarWashView extends SimView{
 		super.update(arg0, arg1);
 		CarWashState state = (CarWashState) arg0;
 		
-		if(event.toString() == "Start") {
+		if(event instanceof StartCarWashEvent) {
 			printHeader(state);
 			printTableHeader();
 			printTableRow(state);
-		} else if (event.toString() == "Stop") {
+		} else if (event instanceof StopEvent) {
 			printTableRow(state);
 			printEnd(state);
 		} else {
@@ -75,7 +74,7 @@ public class CarWashView extends SimView{
 	 * The method prints out the table header.
 	 */
 	private void printTableHeader() {
-		System.out.println(String.format(formatter, 
+		System.out.println(String.format(FORMATTER, 
 				"Time",
 				"Fast",
 				"Slow",
@@ -108,26 +107,38 @@ public class CarWashView extends SimView{
 	 * @param state
 	 */
 	private void printTableRow(CarWashState state) {
-		float time = ((CarWashEvent) event).getTime();
-		int fast = state.getNumFastMachinesAvailable();
-		int slow = state.getNumSlowMachinesAvailable();
-		int id = ((CarWashEvent) event).getCar().getId();
-		float idleTime = state.getMachineIdleTime();
-		float queueTime = state.getQueueTime();
-		int queueSize = state.getQueueSize();
-		int rejected = state.getNumRejectedCars();
 		
-		System.out.println(String.format(formatter, 
-				String.format("%.2f", time),
-				fast,
-				slow,
-				id,
-				event,
-				idleTime,
-				queueTime,
-				queueSize,
-				rejected));
+		try {
+			CarWashEvent carWashEvent = (CarWashEvent) event;
+			Car car = carWashEvent.getCar();
 		
+			float time = carWashEvent.getTime();
+			String id = "-";
+			if( car != null ) {
+				id = Integer.toString(car.getId());
+			}
+		
+			int fast = state.getNumFastMachinesAvailable();
+			int slow = state.getNumSlowMachinesAvailable();
+			float idleTime = state.getMachineIdleTime();
+			float queueTime = state.getQueueTime();
+			int queueSize = state.getQueueSize();
+			int rejected = state.getNumRejectedCars();
+		
+			System.out.println(String.format(FORMATTER, 
+					String.format("%.2f", time),
+					fast,
+					slow,
+					id,
+					event,
+					idleTime,
+					queueTime,
+					queueSize,
+					rejected));
+			
+		} catch( ClassCastException e ) {
+			System.out.println(e);
+		}
 	}
 	
 	/**
