@@ -17,7 +17,7 @@ public class StopEvent extends Event
 	 *  
 	 * @param time when this event should occur
 	 */
-	public StopEvent( long time) {
+	public StopEvent( float time) {
 		super("Stop", time);
 	}
 	

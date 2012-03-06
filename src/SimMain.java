@@ -15,9 +15,8 @@ public class SimMain
 		CarWashState state = new CarWashState();
 		state.addObserver( new CarWashView() );
 
-		Simulator simulator = new Simulator();
-		simulator.setState( state );
-		simulator.addEvent( new StartEvent( 0.0f ) );
+		Simulator simulator = new Simulator(state);
+		simulator.addEvent( new StartCarWashEvent());
 		simulator.addEvent( new StopEvent( 15.0f ) );
 		simulator.run();
 	}
