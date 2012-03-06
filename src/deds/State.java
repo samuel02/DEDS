@@ -2,7 +2,7 @@ package deds;
 
 
 import java.util.Observable;
-
+import deds.events.Event;
 
 /**
  * 
