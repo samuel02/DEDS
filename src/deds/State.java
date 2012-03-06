@@ -5,8 +5,9 @@ import java.util.Observable;
 import deds.events.Event;
 
 /**
+ * An abstract simulator state.
  * 
- * @author sebvik-0
+ * @author Sebastian
  * 
  */
 abstract public class State extends Observable
@@ -22,6 +23,8 @@ abstract public class State extends Observable
 	}
 
 	/**
+	 * Checks if the current simulation is still running.
+	 * 
 	 * @return true if simulation is running
 	 */
 	public boolean isRunning()
@@ -30,7 +33,7 @@ abstract public class State extends Observable
 	}
 
 	/**
-	 * Stop the simulation
+	 * Stops the simulation.
 	 */
 	public void stopRunning()
 	{
@@ -38,10 +41,10 @@ abstract public class State extends Observable
 	}
 	
 	/**
-	 * Call at the start of an event's execute() method.
+	 * Called by the simulator prior to calling an event's execute() method.
 	 * 
 	 * @param event
-	 *            The event that calls the method.
+	 *            The event about to be executed.
 	 */
 	public void beginEvent( Event event )
 	{
@@ -49,7 +52,7 @@ abstract public class State extends Observable
 	}
 	
 	/**
-	 * Call at the end of an event's execute() method.
+	 * Called by the simulator after a call to an event's execute() method.
 	 */
 	public void endEvent()
 	{
@@ -58,7 +61,9 @@ abstract public class State extends Observable
 	}
 	
 	/**
-	 * @return The last event to call the update() method.
+	 * Gets the last event passed to beginEvent().
+	 * 
+	 * @return The last event.
 	 */
 	public Event getLastEvent()
 	{

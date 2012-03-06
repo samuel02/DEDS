@@ -10,8 +10,9 @@ import deds.events.Event;
 
 
 /**
+ * The state of a car wash for a car wash simulation.
  * 
- * @author sebvik-0
+ * @author Sebastian
  * 
  */
 public class CarWashState extends State
@@ -89,6 +90,8 @@ public class CarWashState extends State
 	}
 
 	/**
+	 * Gets the number of fast washing machines.
+	 * 
 	 * @return Number of fast washing machines.
 	 */
 	public int getNumFastMachines()
@@ -97,6 +100,8 @@ public class CarWashState extends State
 	}
 
 	/**
+	 * Gets the number of fast washing machines available.
+	 * 
 	 * @return Number of fast washing machines currently available.
 	 */
 	public int getNumFastMachinesAvailable()
@@ -105,6 +110,8 @@ public class CarWashState extends State
 	}
 
 	/**
+	 * Gets the number of slow washing machines.
+	 * 
 	 * @return Number of slow washing machines.
 	 */
 	public int getNumSlowMachines()
@@ -113,6 +120,8 @@ public class CarWashState extends State
 	}
 
 	/**
+	 * Gets the number of slow washing machines available.
+	 * 
 	 * @return Number of slow washing machines currently available.
 	 */
 	public int getNumSlowMachinesAvailable()
@@ -121,6 +130,8 @@ public class CarWashState extends State
 	}
 
 	/**
+	 * Checks if there are any vacant washing machines.
+	 * 
 	 * @return true if there are one or more machines available (of any kind.)
 	 */
 	public boolean hasVacantMachines()
@@ -129,8 +140,9 @@ public class CarWashState extends State
 	}
 
 	/**
-	 * @return Array containing min and max distribution values for fast washing
-	 *         machines.
+	 * Gets the minimum and maximum distribution values for fast washing machines.
+	 * 
+	 * @return Array containing min and max distribution values.
 	 */
 	public float[] getFastDistribution()
 	{
@@ -141,8 +153,9 @@ public class CarWashState extends State
 	}
 
 	/**
-	 * @return Array containing min and max distribution values for slow washing
-	 *         machines.
+	 * Gets the minimum and maximum distribution values for slow washing machines.
+	 * 
+	 * @return Array containing min and max distribution values.
 	 */
 	public float[] getSlowDistribution()
 	{
@@ -153,6 +166,8 @@ public class CarWashState extends State
 	}
 
 	/**
+	 * Gets the exponential distribution lambda value.
+	 * 
 	 * @return Exponential distribution lambda value.
 	 */
 	public float getExponentialDistribution()
@@ -161,7 +176,9 @@ public class CarWashState extends State
 	}
 
 	/**
-	 * @return Seed used by the state for random operations.
+	 * Gets the seed used by the state for random operations.
+	 * 
+	 * @return Seed number.
 	 */
 	public int getSeed()
 	{
@@ -179,6 +196,8 @@ public class CarWashState extends State
 	}
 
 	/**
+	 * Gets the maximum car queue size.
+	 * 
 	 * @return Maximum car queue size.
 	 */
 	public int getMaxQueueSize()
@@ -187,6 +206,8 @@ public class CarWashState extends State
 	}
 
 	/**
+	 * Gets the current length of the car queue.
+	 * 
 	 * @return Current length of the car queue.
 	 */
 	public int getQueueSize()
@@ -195,6 +216,8 @@ public class CarWashState extends State
 	}
 
 	/**
+	 * Checks if the car queue is empty.
+	 * 
 	 * @return true if the car queue is empty.
 	 */
 	public boolean isQueueEmpty()
@@ -203,6 +226,8 @@ public class CarWashState extends State
 	}
 
 	/**
+	 * Checks if the car queue is full.
+	 * 
 	 * @return true if the car queue is full.
 	 */
 	public boolean isQueueFull()
@@ -211,7 +236,9 @@ public class CarWashState extends State
 	}
 
 	/**
-	 * @return Total time the washing machines have been idle.
+	 * Gets the total time the washing machines have been idle.
+	 * 
+	 * @return Idle time.
 	 */
 	public float getMachineIdleTime()
 	{
@@ -219,7 +246,9 @@ public class CarWashState extends State
 	}
 
 	/**
-	 * @return Total time cars have spent in the queue.
+	 * Gets the total time cars have spent in the queue.
+	 * 
+	 * @return Queuing time.
 	 */
 	public float getQueueTime()
 	{
@@ -227,6 +256,8 @@ public class CarWashState extends State
 	}
 	
 	/**
+	 * Gets the mean queuing time.
+	 * 
 	 * @return Mean queuing time.
 	 */
 	public float getMeanQueueTime()
@@ -235,7 +266,9 @@ public class CarWashState extends State
 	}
 
 	/**
-	 * @return Total number of cars rejected.
+	 * Gets the total number of rejected cars.
+	 * 
+	 * @return Number of cars rejected.
 	 */
 	public int getNumRejectedCars()
 	{
@@ -258,6 +291,9 @@ public class CarWashState extends State
 	 * 
 	 * @param car
 	 *            The car to be rejected.
+	 * 
+	 * @throws CarNotReadyException
+	 *            if car is in the queue, in a wash, is finished or has been rejected.
 	 */
 	public void rejectCar( Car car )
 	{
@@ -277,6 +313,12 @@ public class CarWashState extends State
 	 *            The car to serve.
 	 * 
 	 * @return The time when the wash is done.
+	 * 
+	 * @throws CarNotReadyException
+	 *            if car is in the queue, in a wash, is finished or has been rejected.
+	 * 
+	 * @throws NoAvalibleWashingMachinesException
+	 *            if there are no available washing machines.
 	 */
 	public float serveCar( Car car )
 	{
@@ -312,6 +354,12 @@ public class CarWashState extends State
 	 * 
 	 * @param car
 	 *            The car to place in the queue.
+	 * 
+	 * @throws CarNotReadyException
+	 *            if car is in the queue, in a wash, is finished or has been rejected.
+	 * 
+	 * @throws CarQueueFullException
+	 *            if the car queue is full.
 	 */
 	public void placeCarInQueue( Car car )
 	{
@@ -333,6 +381,9 @@ public class CarWashState extends State
 	 * Pulls the car at the front from the car queue.
 	 * 
 	 * @return The pulled car.
+	 * 
+	 * @throws CarQueueEmptyException
+	 *            if the car queue is empty.
 	 */
 	public Car pullCarFromQueue()
 	{
@@ -352,6 +403,9 @@ public class CarWashState extends State
 	 * 
 	 * @param car
 	 *            The car to remove.
+	 * 
+	 * @throws CarNotInWashException
+	 *            if the car is not in a wash.
 	 */
 	public void removeCarFromWash( Car car )
 	{
@@ -402,7 +456,13 @@ public class CarWashState extends State
 		FINISHED,
 	}
 	
-
+	
+	/**
+	 * A class holding information about a car used by the car wash simulation.
+	 * 
+	 * @author Sebastian
+	 *
+	 */
 	public class Car
 	{
 		private int id;
@@ -426,6 +486,8 @@ public class CarWashState extends State
 		}
 
 		/**
+		 * Gets the id of the car.
+		 * 
 		 * @return Car id.
 		 */
 		public int getId()
@@ -462,6 +524,13 @@ public class CarWashState extends State
 }
 
 
+/**
+ * A first in first out queue implementation.
+ * 
+ * @author Sebastian
+ *
+ * @param <T>
+ */
 class FIFO<T>
 {
 	private Vector<T> vector;
@@ -473,6 +542,8 @@ class FIFO<T>
 	}
 	
 	/**
+	 * Gets the size of the queue.
+	 * 
 	 * @return The number of elements in the FIFO.
 	 */
 	public int size()
@@ -481,8 +552,10 @@ class FIFO<T>
 	}
 	
 	/**
+	 * Adds an item to the back of the queue.
+	 * 
 	 * @param item
-	 *             Adds an item to the back of the queue.
+	 *             The item to be added.
 	 */
 	public void pushBack( T item )
 	{
