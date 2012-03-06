@@ -68,14 +68,14 @@ public class CarWashState extends State
 		fastDistrMax   = DEFAULT_FAST_DISTR_MAX;
 		fastRandStream = new UniformRandomStream( fastDistrMin, fastDistrMax, seed );
 		
-		nSlowMachines = DEFAULT_NUM_SLOW_MACHINES;
-		nSlowAvalible = nSlowMachines;
-		slowDistrMin  = DEFAULT_SLOW_DISTR_MIN;
-		slowDistrMax  = DEFAULT_SLOW_DISTR_MAX;
+		nSlowMachines  = DEFAULT_NUM_SLOW_MACHINES;
+		nSlowAvalible  = nSlowMachines;
+		slowDistrMin   = DEFAULT_SLOW_DISTR_MIN;
+		slowDistrMax   = DEFAULT_SLOW_DISTR_MAX;
 		slowRandStream = new UniformRandomStream( slowDistrMin, slowDistrMax, seed );
 		
 		expDistrLambda = DEFAULT_EXP_DISTRI_LAMBDA;
-		expRandStream = new ExponentialRandomStream( expDistrLambda, seed );
+		expRandStream  = new ExponentialRandomStream( expDistrLambda, seed );
 		
 		maxQueueSize = DEFAULT_MAX_QUEUE_SIZE;
 		carQueue     = new FIFO<Car>();
@@ -255,9 +255,19 @@ public class CarWashState extends State
 
 	/**
 	 * Rejects a car, this method should be called if the car queue is full.
+	 * 
+	 * @param car
+	 *            The car to be rejected.
 	 */
-	public void rejectCar()
+	public void rejectCar( Car car )
 	{
+		if ( car.getState() != CarState.READY )
+		{
+			throw new CarNotReadyException();
+		}
+		
+		car.setState( CarState.REJECTED );
+		
 		nRejectedCars++;
 		nCars--;
 	}
@@ -265,35 +275,33 @@ public class CarWashState extends State
 	/**
 	 * @param car
 	 *            The car to serve.
-	 *            
+	 * 
 	 * @return The time when the wash is done.
 	 */
 	public float serveCar( Car car )
 	{
+		if ( car.getState() != CarState.READY )
+		{
+			throw new CarNotReadyException();
+		}
+		
 		float time = getLastEvent().getTime();
 		
-		if ( car.getWMType() == WashingMachineType.NONE )
+		if ( nFastAvalible > 0 )
 		{
-			if ( nFastAvalible > 0 )
-			{
-				car.setWMType( WashingMachineType.FAST );
-				nFastAvalible--;
-				time += (float) fastRandStream.next();
-			}
-			else if ( nSlowAvalible > 0 )
-			{
-				car.setWMType( WashingMachineType.SLOW );
-				nSlowAvalible--;
-				time += (float) slowRandStream.next();
-			}
-			else
-			{
-				// TODO: Throw an exception!!
-			}
+			car.setState( CarState.IN_FAST_WASH );
+			nFastAvalible--;
+			time += (float) fastRandStream.next();
+		}
+		else if ( nSlowAvalible > 0 )
+		{
+			car.setState( CarState.IN_SLOW_WASH );
+			nSlowAvalible--;
+			time += (float) slowRandStream.next();
 		}
 		else
 		{
-			// TODO: Throw an exception!!
+			throw new NoAvalibleWashingMachinesException();
 		}
 		
 		return time;
@@ -307,11 +315,17 @@ public class CarWashState extends State
 	 */
 	public void placeCarInQueue( Car car )
 	{
-		if ( isQueueFull() )
+		if ( car.getState() != CarState.READY )
 		{
-			// TODO: Throw an exception!!
+			throw new CarNotReadyException();
 		}
 		
+    	if ( isQueueFull() )
+		{
+    		throw new CarQueueFullException();
+		}
+    	
+		car.setState( CarState.QUEUED );
 		carQueue.pushBack( car );
 	}
 
@@ -324,10 +338,13 @@ public class CarWashState extends State
 	{
 		if ( isQueueEmpty() )
 		{
-			// TODO: Throw an exception!!
+			throw new CarQueueEmptyException();
 		}
 		
-		return carQueue.popFront();
+		Car car = carQueue.popFront();
+		car.setState( CarState.READY );
+		
+		return car;
 	}
 
 	/**
@@ -338,28 +355,21 @@ public class CarWashState extends State
 	 */
 	public void removeCarFromWash( Car car )
 	{
-		switch ( car.getWMType() )
+		switch ( car.getState() )
 		{
-		case NONE:
-			// TODO: Throw an exception!!
-			break;
-		case FAST:
+		case IN_FAST_WASH:
 			nFastAvalible++;
 			break;
-		case SLOW:
+		case IN_SLOW_WASH:
 			nSlowAvalible++;
 			break;
+		default:
+			throw new CarNotInWashException();
 		}
 		
-		car.setWMType( WashingMachineType.NONE );
+		car.setState( CarState.FINISHED );
 	}
 	
-	/**
-	 * Call at the start of an event's execute() method.
-	 * 
-	 * @param event
-	 *            The event that calls the method.
-	 */
 	@Override
 	public void beginEvent( Event event )
 	{
@@ -382,34 +392,37 @@ public class CarWashState extends State
 		super.beginEvent( event );
 	}
 	
-	private enum WashingMachineType
+	private enum CarState
 	{
-		NONE,
-		FAST,
-		SLOW,
+		READY,
+		REJECTED,
+		QUEUED,
+		IN_FAST_WASH,
+		IN_SLOW_WASH,
+		FINISHED,
 	}
 	
 
 	public class Car
 	{
 		private int id;
-		private WashingMachineType wmType;
+		private CarState state;
 
 
-		Car( int id )
+		private Car( int id )
 		{
 			this.id = id;
-			wmType = WashingMachineType.NONE;
+			state = CarState.READY;
 		}
 		
-		WashingMachineType getWMType()
+		private CarState getState()
 		{
-			return wmType;
+			return state;
 		}
 		
-		void setWMType( WashingMachineType wmType )
+		private void setState( CarState state )
 		{
-			this.wmType = wmType;
+			this.state = state;
 		}
 
 		/**
@@ -419,6 +432,32 @@ public class CarWashState extends State
 		{
 			return id;
 		}
+	}
+	
+	
+	public class NoAvalibleWashingMachinesException extends RuntimeException {
+
+		private static final long serialVersionUID = 7982650438299570762L;
+	}
+	
+	public class CarQueueEmptyException extends RuntimeException {
+
+		private static final long serialVersionUID = -3662676523771613893L;
+	}
+	
+	public class CarQueueFullException extends RuntimeException {
+
+		private static final long serialVersionUID = -8352726256107153636L;
+	}
+	
+	public class CarNotReadyException extends RuntimeException {
+
+		private static final long serialVersionUID = 5823079140587725283L;
+	}
+	
+	public class CarNotInWashException extends RuntimeException {
+
+		private static final long serialVersionUID = -3732622100738630197L;
 	}
 }
 
