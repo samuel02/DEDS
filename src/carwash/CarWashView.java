@@ -32,6 +32,7 @@ public class CarWashView extends SimView{
 	 * The update method receives info from the observed object,
 	 * i.e. the state and prints info accordingly.
 	 */
+	@Override
 	public void update(Observable arg0, Object arg1) {
 		super.update(arg0, arg1);
 		CarWashState state = (CarWashState) arg0;
