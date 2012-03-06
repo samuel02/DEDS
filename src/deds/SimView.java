@@ -21,6 +21,7 @@ public abstract class SimView implements Observer{
 	
 	}
 	
+	@Override
 	public void update(Observable arg0, Object arg1) {
 		State state = (State) arg0;
 		event = state.getLastEvent();
