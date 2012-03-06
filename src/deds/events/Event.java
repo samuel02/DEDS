@@ -26,7 +26,13 @@ public abstract class Event implements Comparable<Event>
 	}
 	
 	
-	//javadoc override
+	/**
+	 * Compares to events with each other.
+	 * 
+	 * @param e, event to compare with
+	 * 
+	 * @return An integer representing the difference in time between them.
+	 */
 	@Override
 	public int compareTo(Event e) {
 		return time.compareTo(e.time);

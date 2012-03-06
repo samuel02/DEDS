@@ -14,15 +14,15 @@ import deds.events.StartEvent;
 public class StartCarWashEvent extends  StartEvent
 {
 
-	/**
-	 * Creates an instance of this class
-	 */
-	public StartCarWashEvent() {
-	}
 
 	
 	
-	//overrides javadoc too:)
+	/**
+	 * Starts the simulation
+	 * 
+	 * @param sim, the simulator to place events in
+	 * @param s, the state to start
+	 */
 	@Override
 	public void execute(Simulator sim, State s) {
 		CarWashState cws = (CarWashState) s;

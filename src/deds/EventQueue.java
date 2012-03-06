@@ -16,7 +16,7 @@ public class EventQueue {
     ArrayList<Event> sortedList;
       
     /**
-     * init's queue
+     * Creates an event queue
      */
     public EventQueue() {
         sortedList = new ArrayList<Event>();
