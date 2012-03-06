@@ -2,6 +2,7 @@ package deds;
 
 import java.util.Observer;
 import java.util.Observable;
+import deds.events.*;
 
 /**
  * Abstract class for view implements Observer.
