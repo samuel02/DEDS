@@ -16,17 +16,17 @@ import deds.events.Event;
 public class CarWashState extends State {
 	private final int DEFAULT_SEED = 1234;
 
-	private final int DEFAULT_NUM_FAST_MACHINES = 2;
-	private final float DEFAULT_FAST_DISTR_MIN = 2.8f;
-	private final float DEFAULT_FAST_DISTR_MAX = 4.6f;
+	private final int DEFAULT_NUM_FAST_MACHINES = 3;
+	private final float DEFAULT_FAST_DISTR_MIN = 2.0f;
+	private final float DEFAULT_FAST_DISTR_MAX = 4.5f;
 
-	private final int DEFAULT_NUM_SLOW_MACHINES = 2;
-	private final float DEFAULT_SLOW_DISTR_MIN = 3.5f;
+	private final int DEFAULT_NUM_SLOW_MACHINES = 3;
+	private final float DEFAULT_SLOW_DISTR_MIN = 4.1f;
 	private final float DEFAULT_SLOW_DISTR_MAX = 6.7f;
 
-	private final float DEFAULT_EXP_DISTRI_LAMBDA = 2.0f;
+	private final float DEFAULT_EXP_DISTRI_LAMBDA = 2.5f;
 
-	private final int DEFAULT_MAX_QUEUE_SIZE = 5;
+	private final int DEFAULT_MAX_QUEUE_SIZE = 3;
 
 	private int seed;
 

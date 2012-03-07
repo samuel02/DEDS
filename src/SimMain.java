@@ -17,7 +17,7 @@ public class SimMain
 
 		Simulator simulator = new Simulator(state);
 		simulator.addEvent( new StartCarWashEvent());
-		simulator.addEvent( new StopEvent( 15.0f ) );
+		simulator.addEvent( new StopEvent( 10.0f ) );
 		simulator.run();
 	}
 }
