@@ -1,7 +1,6 @@
 package carwash.events;
 
 import carwash.CarWashState;
-import carwash.CarWashState.Car;
 import deds.Simulator;
 
 /**
@@ -13,12 +12,14 @@ import deds.Simulator;
  */
 class ArriveEvent extends CarWashEvent{
 	
-	protected ArriveEvent(float time, Car car) {
-		super(car,"Arrive", time);
+	protected ArriveEvent(float time) {
+		super(null,"Arrive", time);
 	}
 
 	@Override
 	protected void execute(Simulator sim,CarWashState s) {
+		
+		car = s.createNewCar();
 		
 		// this block does the necessary actions for the arrived car
 		{
@@ -50,8 +51,7 @@ class ArriveEvent extends CarWashEvent{
 		//this block does necessary actions on the simulator so the simulation will keep going on
 		{
 			//inserts a new arrive event into queue
-			Car newCar = s.createNewCar();
-			sim.addEvent(new ArriveEvent(s.getNewArriveTime(),newCar));
+			sim.addEvent(new ArriveEvent(s.getNewArriveTime()));
 		}
 	}
 

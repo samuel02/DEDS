@@ -1,7 +1,6 @@
 package carwash.events;
 
 import carwash.CarWashState;
-import carwash.CarWashState.Car;
 import deds.Simulator;
 import deds.State;
 import deds.events.StartEvent;
@@ -26,9 +25,7 @@ public class StartCarWashEvent extends  StartEvent
 	@Override
 	public void execute(Simulator sim, State s) {
 		CarWashState cws = (CarWashState) s;
-		Car newCar = cws.createNewCar();
-		sim.addEvent(new ArriveEvent(cws.getNewArriveTime(),newCar));
-		
+		sim.addEvent(new ArriveEvent(cws.getNewArriveTime()));
 	}
 
 }
