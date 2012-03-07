@@ -246,6 +246,10 @@ public class CarWashState extends State {
 	public float getMeanQueueTime() {
 		return queueTime / nCars;
 	}
+	
+	public int getNumCars() {
+		return nCars;
+	}
 
 	/**
 	 * Gets the total number of rejected cars.

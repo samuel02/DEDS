@@ -95,6 +95,7 @@ public class CarWashView extends SimView{
 		printSeparator();
 		System.out.println("Total idle machine time:" + String.format("%.2f", state.getMachineIdleTime()));
 		System.out.println("Total queueing time: " + String.format("%.2f", state.getQueueTime()));
+		System.out.println("Total amount cars: " + state.getNumCars());
 		System.out.println("Mean queuing time: " + String.format("%.2f", state.getMeanQueueTime()));
 		System.out.println("Rejected cars: " + state.getNumRejectedCars());
 	}
