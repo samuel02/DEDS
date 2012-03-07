@@ -42,11 +42,13 @@ public class Simulator {
 		do {
 			Event nextEvent = eventQueue.removeNextEvent();
 			
-			if(nextEvent != null) {
-				state.beginEvent(nextEvent);
-				nextEvent.execute(this,state);
-				state.endEvent();
+			if(nextEvent == null) {
+				break;
 			}
+			
+			state.beginEvent(nextEvent);
+			nextEvent.execute(this,state);
+			state.endEvent();
 			
 		}while (state.isRunning());
 	}
