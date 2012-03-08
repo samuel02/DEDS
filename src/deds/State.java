@@ -49,6 +49,8 @@ abstract public class State extends Observable
 	public void beginEvent( Event event )
 	{
 		lastEvent = event;
+		setChanged();
+		notifyObservers();
 	}
 	
 	/**
@@ -56,8 +58,7 @@ abstract public class State extends Observable
 	 */
 	public void endEvent()
 	{
-		setChanged();
-		notifyObservers();
+		
 	}
 	
 	/**
